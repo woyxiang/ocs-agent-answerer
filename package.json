@@ -1,0 +1,25 @@
+{
+ "name": "ocs-agent-answerer",
+ "version": "0.1.0",
+ "private": true,
+ "description": "让 pi / claude code 之类的 agent 充当 OCS 网课助手（ocsjs）的题库后端",
+ "type": "module",
+ "bin": {
+  "ocs-agent-answerer": "server.mjs"
+ },
+ "scripts": {
+  "start": "node server.mjs",
+  "dev": "node server.mjs --runner mock --verbose",
+  "test": "node smoke.mjs",
+  "e2e": "node e2e.mjs",
+  "setup": "pi install -l npm:@ssk_dev/pi-web-access-lean"
+ },
+ "engines": {
+  "node": ">=18"
+ },
+ "pi": {
+  "packages": [
+   "npm:@ssk_dev/pi-web-access-lean"
+  ]
+ }
+}

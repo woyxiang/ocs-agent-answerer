@@ -1,0 +1,27 @@
+{
+	"$schema": "https://ocsjs.github.io/answerer.config.schema.json",
+	"title": "下列哪项属于固定成本？",
+	"options": "A. 厂房租金\nB. 原材料\nC. 销售提成\nD. 包装材料",
+	"type": "single",
+	"verbose": false,
+	"wrappers": [
+		{
+			"name": "本地 Agent（pi）",
+			"homepage": "http://127.0.0.1:8787",
+			"url": "http://127.0.0.1:8787/ask",
+			"method": "post",
+			"type": "GM_xmlhttpRequest",
+			"responseType": "json",
+			"headers": {
+				"Content-Type": "application/json"
+			},
+			"data": {
+				"payload": {
+					"handler": "return (env) => ({ title: env.title || '', options: env.options || '', type: env.type || 'unknown', images: env.images || [], suggestionTitle: env.suggestion_title || '', suggestionOptions: env.suggestion_options || '', blanks: (typeof document !== 'undefined') ? document.querySelectorAll('textarea:not([disabled])').length : 0, page: (typeof location !== 'undefined') ? location.href : '' })"
+				}
+			},
+			"handler": "return (res) => (res && res.ok && res.answer) ? [[res.question, res.answer, { source: res.source, cached: !!res.cached, ms: res.ms }]] : undefined",
+			"v": 2
+		}
+	]
+}

@@ -1,0 +1,45 @@
+// ocs-agent-answerer 配置示例
+// 用法：node server.mjs --config answerer.json
+// 优先级：默认值 ← 本文件 ← 命令行（命令行优先，所以临时改一项直接加参数即可）
+// 路径都相对本文件所在目录。
+{
+  // ---- 基本 ----
+  "host": "127.0.0.1",
+  "port": 8787,
+  "runner": "pi",           // pi | claude | mock
+  "model": "",              // 传给 agent 的模型，空 = 用 agent 自己的默认
+  "bin": "",                // agent 可执行文件路径，空 = 走 PATH
+  "concurrency": 1,
+
+  // ---- 超时 ----
+  // timeout 是「本服务等 agent 多久」。OCS 侧默认 60s（可改，见 README「超时」），
+  // 把 OCS 改大之后记得把 ocsTimeout 一起改，否则本服务的告警与提示会不准。
+  "timeout": 45000,
+  "ocsTimeout": 60000,
+
+  // ---- 提示词 ----
+  // 模版一：无教材（通用知识，最省；不放开文件工具）
+  "template": "default",
+  // 模版二：参考教材 —— 把 template 换成 "textbook" 并配好 textbooks。
+  // 注意：prompt 里只写「教材在哪」，正文由 agent 自己 grep/read（read+bash 会自动放开）
+  // "template": "textbook",
+  "textbooks": "",          // 教材文件/目录，逗号分隔；留空则自动用 ./textbooks
+  "textbookMaxChars": 0,    // 0 = 不把教材正文塞进 prompt（推荐）；设 N>0 才附正文前 N 字符
+  // 模版三：全自定义 —— 写一个模版文件，里面的 {{占位符}} 会被替换（优先级高于 template）
+  // "prompt": "./my-template.md",
+
+  // ---- 联网搜索（pi runner）----
+  // 默认给答题 agent 挂 web_access 工具（@ssk_dev/pi-web-access-lean，约 153 token）。
+  // 提示词里是「拿不准再搜」，不是「先搜再答」：一次搜索 2~5 秒，会吃掉单题超时预算。
+  "webSearch": true,
+  // 插件入口，空 = 自动探测 .pi/npm/node_modules/@ssk_dev/pi-web-access-lean/index.ts
+  "webSearchExt": "",
+
+  // ---- 其他 ----
+  "cache": "cache.json",
+  "noCache": false,
+  "publicUrl": "",
+  "token": "",
+  "maxBody": 33554432,
+  "verbose": false
+}
